@@ -31,15 +31,22 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listViewWeb = new System.Windows.Forms.ListView();
             this.imageListView = new System.Windows.Forms.ImageList(this.components);
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.richTextBoxListLink = new System.Windows.Forms.RichTextBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBoxInfomation = new System.Windows.Forms.GroupBox();
             this.enableLabel = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
@@ -60,7 +67,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnGet = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -69,7 +76,7 @@
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewWeb = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.deleteBtn = new System.Windows.Forms.Button();
             this.saveBtn = new System.Windows.Forms.Button();
@@ -97,12 +104,14 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.imageListMenu = new System.Windows.Forms.ImageList(this.components);
             this.imageListButton = new System.Windows.Forms.ImageList(this.components);
+            this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.groupBoxInfomation.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -111,8 +120,9 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWeb)).BeginInit();
             this.groupBox2.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -121,7 +131,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.ImageList = this.imageListView;
             this.tabControl1.ItemSize = new System.Drawing.Size(71, 60);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -159,7 +169,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.richTextBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.richTextBoxListLink);
             this.splitContainer1.Size = new System.Drawing.Size(926, 399);
             this.splitContainer1.SplitterDistance = 676;
             this.splitContainer1.TabIndex = 5;
@@ -175,6 +185,7 @@
             this.listViewWeb.SmallImageList = this.imageListView;
             this.listViewWeb.TabIndex = 0;
             this.listViewWeb.UseCompatibleStateImageBehavior = false;
+            this.listViewWeb.SelectedIndexChanged += new System.EventHandler(this.listViewWeb_SelectedIndexChanged);
             // 
             // imageListView
             // 
@@ -183,14 +194,14 @@
             this.imageListView.Images.SetKeyName(0, "bell-ring.png");
             this.imageListView.Images.SetKeyName(1, "Bell-quiet.png");
             // 
-            // richTextBox1
+            // richTextBoxListLink
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(246, 399);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "List link ";
+            this.richTextBoxListLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxListLink.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxListLink.Name = "richTextBoxListLink";
+            this.richTextBoxListLink.Size = new System.Drawing.Size(246, 399);
+            this.richTextBoxListLink.TabIndex = 0;
+            this.richTextBoxListLink.Text = "List link ";
             // 
             // flowLayoutPanel2
             // 
@@ -211,11 +222,48 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label20);
+            this.panel1.Controls.Add(this.label19);
+            this.panel1.Controls.Add(this.textBox2);
+            this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(286, 73);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(938, 72);
             this.panel1.TabIndex = 2;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(276, 39);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(64, 17);
+            this.label20.TabIndex = 3;
+            this.label20.Text = "Search:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(16, 39);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(38, 17);
+            this.label19.TabIndex = 2;
+            this.label19.Text = "Sort";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(346, 36);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(277, 22);
+            this.textBox2.TabIndex = 1;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(85, 32);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 24);
+            this.comboBox1.TabIndex = 0;
             // 
             // groupBoxInfomation
             // 
@@ -252,81 +300,72 @@
             this.enableLabel.AutoSize = true;
             this.enableLabel.Location = new System.Drawing.Point(77, 317);
             this.enableLabel.Name = "enableLabel";
-            this.enableLabel.Size = new System.Drawing.Size(61, 17);
+            this.enableLabel.Size = new System.Drawing.Size(0, 17);
             this.enableLabel.TabIndex = 21;
-            this.enableLabel.Text = "label27";
             // 
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
             this.statusLabel.Location = new System.Drawing.Point(77, 285);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(61, 17);
+            this.statusLabel.Size = new System.Drawing.Size(0, 17);
             this.statusLabel.TabIndex = 20;
-            this.statusLabel.Text = "label26";
             // 
             // durationLabel
             // 
             this.durationLabel.AutoSize = true;
             this.durationLabel.Location = new System.Drawing.Point(77, 240);
             this.durationLabel.Name = "durationLabel";
-            this.durationLabel.Size = new System.Drawing.Size(61, 17);
+            this.durationLabel.Size = new System.Drawing.Size(0, 17);
             this.durationLabel.TabIndex = 19;
-            this.durationLabel.Text = "label25";
             // 
             // emailLabel
             // 
             this.emailLabel.AutoSize = true;
             this.emailLabel.Location = new System.Drawing.Point(77, 201);
             this.emailLabel.Name = "emailLabel";
-            this.emailLabel.Size = new System.Drawing.Size(61, 17);
+            this.emailLabel.Size = new System.Drawing.Size(0, 17);
             this.emailLabel.TabIndex = 18;
-            this.emailLabel.Text = "label24";
             // 
             // phoneLabel
             // 
             this.phoneLabel.AutoSize = true;
             this.phoneLabel.Location = new System.Drawing.Point(77, 169);
             this.phoneLabel.Name = "phoneLabel";
-            this.phoneLabel.Size = new System.Drawing.Size(61, 17);
+            this.phoneLabel.Size = new System.Drawing.Size(0, 17);
             this.phoneLabel.TabIndex = 17;
-            this.phoneLabel.Text = "label23";
             // 
             // urlLabel
             // 
             this.urlLabel.AutoSize = true;
             this.urlLabel.Location = new System.Drawing.Point(77, 62);
             this.urlLabel.Name = "urlLabel";
-            this.urlLabel.Size = new System.Drawing.Size(61, 17);
+            this.urlLabel.Size = new System.Drawing.Size(0, 17);
             this.urlLabel.TabIndex = 16;
-            this.urlLabel.Text = "label22";
             // 
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
             this.nameLabel.Location = new System.Drawing.Point(77, 32);
             this.nameLabel.Name = "nameLabel";
-            this.nameLabel.Size = new System.Drawing.Size(61, 17);
+            this.nameLabel.Size = new System.Drawing.Size(0, 17);
             this.nameLabel.TabIndex = 15;
-            this.nameLabel.Text = "label21";
             // 
             // priorityLabel
             // 
             this.priorityLabel.AutoSize = true;
             this.priorityLabel.Location = new System.Drawing.Point(77, 134);
             this.priorityLabel.Name = "priorityLabel";
-            this.priorityLabel.Size = new System.Drawing.Size(61, 17);
+            this.priorityLabel.Size = new System.Drawing.Size(0, 17);
             this.priorityLabel.TabIndex = 14;
-            this.priorityLabel.Text = "label20";
             // 
             // ipLabel
             // 
             this.ipLabel.AutoSize = true;
             this.ipLabel.Location = new System.Drawing.Point(77, 98);
             this.ipLabel.Name = "ipLabel";
-            this.ipLabel.Size = new System.Drawing.Size(61, 17);
+            this.ipLabel.Size = new System.Drawing.Size(0, 17);
             this.ipLabel.TabIndex = 13;
-            this.ipLabel.Text = "label19";
             // 
             // label18
             // 
@@ -411,7 +450,7 @@
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Controls.Add(this.btnGet);
             this.flowLayoutPanel1.Controls.Add(this.button2);
             this.flowLayoutPanel1.Controls.Add(this.button3);
             this.flowLayoutPanel1.Controls.Add(this.button4);
@@ -421,16 +460,16 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1221, 70);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
-            // button1
+            // btnGet
             // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button1.Location = new System.Drawing.Point(3, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(126, 67);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnGet.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnGet.Location = new System.Drawing.Point(3, 3);
+            this.btnGet.Name = "btnGet";
+            this.btnGet.Size = new System.Drawing.Size(126, 67);
+            this.btnGet.TabIndex = 0;
+            this.btnGet.Text = "button1";
+            this.btnGet.UseVisualStyleBackColor = true;
+            this.btnGet.Click += new System.EventHandler(this.btnGet_Click_1);
             // 
             // button2
             // 
@@ -441,6 +480,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
@@ -469,6 +509,7 @@
             this.tabPage2.Controls.Add(this.splitter4);
             this.tabPage2.Controls.Add(this.splitter3);
             this.tabPage2.Controls.Add(this.splitter2);
+            this.tabPage2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabPage2.Location = new System.Drawing.Point(4, 64);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -485,8 +526,8 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.panel2);
             this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel3);
-            this.splitContainer2.Panel1.Controls.Add(this.dataGridView1);
             // 
             // splitContainer2.Panel2
             // 
@@ -519,18 +560,43 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(95, 3);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(405, 30);
+            this.textBox1.Size = new System.Drawing.Size(405, 22);
             this.textBox1.TabIndex = 1;
             // 
-            // dataGridView1
+            // dataGridViewWeb
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(534, 553);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridViewWeb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewWeb.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewWeb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewWeb.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridViewWeb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewWeb.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewWeb.Name = "dataGridViewWeb";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewWeb.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridViewWeb.RowTemplate.Height = 24;
+            this.dataGridViewWeb.Size = new System.Drawing.Size(534, 515);
+            this.dataGridViewWeb.TabIndex = 0;
             // 
             // groupBox2
             // 
@@ -776,6 +842,15 @@
             this.imageListButton.ImageSize = new System.Drawing.Size(60, 40);
             this.imageListButton.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.dataGridViewWeb);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 38);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(534, 515);
+            this.panel2.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -791,6 +866,8 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.groupBoxInfomation.ResumeLayout(false);
             this.groupBoxInfomation.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -801,9 +878,10 @@
             this.splitContainer2.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWeb)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -818,7 +896,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBoxInfomation;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnGet;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
@@ -827,7 +905,7 @@
         private System.Windows.Forms.ImageList imageListButton;
         private System.Windows.Forms.ImageList imageListView;
         private System.Windows.Forms.ListView listViewWeb;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBoxListLink;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -860,7 +938,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewWeb;
         private System.Windows.Forms.Label enableLabel;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.Label durationLabel;
@@ -876,6 +954,11 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Panel panel2;
 
     }
 }

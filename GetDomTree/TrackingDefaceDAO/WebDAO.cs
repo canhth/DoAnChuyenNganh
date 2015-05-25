@@ -12,6 +12,7 @@ namespace TrackingDefaceDAO
     public class WebDAO :DBConnection
     {
         public WebDAO() : base() {}
+
         /* Get all records WEb */
         public DataTable GetAll()
         {
@@ -19,7 +20,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("selecxxxx");
+                SqlCommand cmd = new SqlCommand("Select NameSite, URL, IPPublic, Phones, isEnable from WEB", conn);
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -38,7 +39,9 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Select * from WEB where isEnable = '1' ");
+                SqlCommand cmd = new SqlCommand("select * from WEB "
+                                                + " where isEnable = @isEnable ", conn);
+                cmd.Parameters.Add("@isEnable", SqlDbType.Bit).Value = isEnable;
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -53,24 +56,35 @@ namespace TrackingDefaceDAO
         }
 
         /* Get list web isEnable tracking */
-        public string GetWebIsEnableTracking(int isEnable)
+        public Web GetWebbyName(string nameSite)
         {
-            string url = "";
+            Web web = new Web();
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("select URL from WEB "           
-                                                + " where isEnable = 'isEnable' ", conn);
-                cmd.Parameters.Add("@isEnable", SqlDbType.Int).Value = isEnable;
+                SqlCommand cmd = new SqlCommand("select * from WEB "
+                                                + " where NameSite = @nameSite ", conn);
+                cmd.Parameters.Add("@nameSite", SqlDbType.NVarChar).Value = nameSite;
                 SqlDataReader rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
-                    url = rd["URL"].ToString().Trim();
+                    web.webID = (int)rd["WebID"];
+                    web.nameSite = rd["NameSite"].ToString().Trim();
+                    web.uRL = rd["URL"].ToString().Trim();
+                    web.ipPulbic = rd["IPPublic"].ToString().Trim();
+                    web.ipPrivate = rd["IPPrivate"].ToString().Trim();
+                    web.webPriority = (int)rd["WebPriority"];
+                    web.phones = rd["Phones"].ToString().Trim();
+                    web.emails = rd["Emails"].ToString().Trim();
+                    web.searchText = rd["searchText"].ToString().Trim();
+                    web.webStatus = rd["WebStatus"].ToString().Trim();
+                    web.banText = rd["BanText"].ToString().Trim();
+                    web.isEnable = (bool)rd["isEnable"];
                     rd.Close();
                 }
                 conn.Close();
-                return url;
+                return web;
             }
             catch (Exception)
             {
@@ -100,7 +114,7 @@ namespace TrackingDefaceDAO
                 cmd.Parameters.Add("@searchText", SqlDbType.NVarChar).Value = web.searchText;
                 cmd.Parameters.Add("@WebStatus", SqlDbType.NVarChar).Value = web.webStatus;
                 cmd.Parameters.Add("@BanText", SqlDbType.NVarChar).Value = web.banText;
-                cmd.Parameters.Add("@isEnable", SqlDbType.Int).Value = web.isEnable;
+                cmd.Parameters.Add("@isEnable", SqlDbType.Bit).Value = web.isEnable;
 
                 cmd.ExecuteNonQuery();
                 conn.Close();
@@ -136,7 +150,7 @@ namespace TrackingDefaceDAO
                 cmd.Parameters.Add("@searchText", SqlDbType.NVarChar).Value = web.searchText;
                 cmd.Parameters.Add("@WebStatus", SqlDbType.NVarChar).Value = web.webStatus;
                 cmd.Parameters.Add("@BanText", SqlDbType.NVarChar).Value = web.banText;
-                cmd.Parameters.Add("@isEnable", SqlDbType.Int).Value = web.isEnable;
+                cmd.Parameters.Add("@isEnable", SqlDbType.Bit).Value = web.isEnable;
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;

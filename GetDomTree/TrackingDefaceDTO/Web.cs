@@ -19,11 +19,11 @@ namespace TrackingDefaceDTO
         public string searchText { get; set; }
         public string webStatus { get; set; }
         public string banText { get; set; }
-        public int isEnable { get; set; }
+        public bool isEnable { get; set; }
 
         public Web() { }
 
-        public Web (int webid, string namsite, string url, string ippub, string ippri, int priority, string phone, string email, string searchtext, string status, string bantext, int isenable)
+        public Web (int webid, string namsite, string url, string ippub, string ippri, int priority, string phone, string email, string searchtext, string status, string bantext, bool isenable)
         {
             this.webID = webid;
             this.nameSite = namsite;
