@@ -15,83 +15,55 @@ namespace TrackingDefaceBUS.Utils
     public class UtilsHtmlAgility
     {
         int i, j, k, loi, saiSo;
+        HtmlDocument doc = new HtmlDocument();
 
         public string GetChildLink(string url)
         {
-            string a = "";
-            for (int i = 0; i < url.Count(); i++)
+            String str2;
+            // Call the page and get the generated HTML
+            HtmlAgilityPack.HtmlNode.ElementsFlags["br"] = HtmlAgilityPack.HtmlElementFlag.Empty;
+            doc.OptionWriteEmptyNodes = true;
+            try
             {
-                // Call the page and get the generated HTML
-                var doc = new HtmlAgilityPack.HtmlDocument();
-                HtmlAgilityPack.HtmlNode.ElementsFlags["br"] = HtmlAgilityPack.HtmlElementFlag.Empty;
-                doc.OptionWriteEmptyNodes = true;
+                var webRequest = HttpWebRequest.Create(url);
+                Stream stream = webRequest.GetResponse().GetResponseStream();
+                doc.Load(stream);
+                stream.Close();
 
-                try
-                {
-                    var webRequest = HttpWebRequest.Create(url);
-                    Stream stream = webRequest.GetResponse().GetResponseStream();
-                    doc.Load(stream);
-                    stream.Close();
-                }
-                catch (System.UriFormatException uex)
-                {
-                    Console.WriteLine("There was an error in the format of the url", uex);
-                    throw;
-                }
-                catch (System.Net.WebException wex)
-                {
-                    Console.WriteLine("There was an error connecting to the url: ", wex);
-                    throw;
-                }
-
-                string output = doc.DocumentNode.OuterHtml;
-
-                Console.WriteLine("Chuoi chua bo HTML");
-                Console.WriteLine(output.Length);
-
-                String str2 = Regex.Replace(output, "<.*?>", string.Empty);
-
-                Console.WriteLine("Chuoi da bo HTML");
-                Console.WriteLine(str2.Length);
-
-                if (!SoSanh(str2, str2))
-                {
-                    Console.WriteLine("Hai chuoi khac nhau vi loi > sai so");
-                }
-                else
-                    Console.WriteLine("Hai chuoi giong nhau vi loi < sai so");
-
-                // HtmlAgilityPack.HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("<body>");
-                //HtmlAgilityPack.HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div");
-                //HtmlAgilityPack.HtmlNodeCollection nodes = doc.DocumentNode.DescendantNodes().Where(n=>n.Name == "div");
-                // Console.WriteLine(nodes.Count());
-
-
-                var output1 = doc.DocumentNode.SelectNodes("//a[@class='tmenu']");
-                foreach (var ii in output1)
-                {
-                    var data = ii.Attributes["href"].Value;
-                    a += data.ToString();
-                    Console.WriteLine(data);
-                }
-
-
-                //var allLink = doc.DocumentNode.SelectNodes("//li[@class='li_item_tab']/a");
-                //foreach (var node in allLink)
-                //{
-                //    var hrefNode = node.Attributes["href"].Value;
-                //    foreach (char afal in hrefNode)
-                //    {
-                //        if (!(afal.Equals("www.")) && (afal.Equals("")))
-                //        {
-
-                //        }
-                //    }
-                //    a += hrefNode.ToString();
-                //    Console.WriteLine(hrefNode);
-                //}
             }
-            return a;
+            catch (System.UriFormatException uex)
+            {
+                Console.WriteLine("There was an error in the format of the url", uex);
+                throw;
+            }
+            catch (System.Net.WebException wex)
+            {
+                Console.WriteLine("There was an error connecting to the url: ", wex);
+                throw;
+            }
+            string output = doc.DocumentNode.OuterHtml;
+
+            Console.WriteLine("Chuoi chua bo HTML");
+            Console.WriteLine(output.Length);
+
+            str2 = Regex.Replace(output, "<.*?>", string.Empty);
+
+            Console.WriteLine("Chuoi da bo HTML");
+            Console.WriteLine(str2.Length);  
+            return "";
+        }
+
+        public string GetChildLink ()
+        {
+            string links = "";
+            var output1 = doc.DocumentNode.SelectNodes("//a[@class='tmenu']");
+            foreach (var ii in output1)
+            {
+                var data = ii.Attributes["href"].Value;
+                links += data.ToString();
+                Console.WriteLine(data);
+            }
+            return links;
         }
 
         // Thuat toan

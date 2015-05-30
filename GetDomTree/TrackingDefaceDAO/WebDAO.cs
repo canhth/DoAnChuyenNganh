@@ -20,7 +20,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Select NameSite, URL, IPPublic, Phones, isEnable from WEB", conn);
+                SqlCommand cmd = new SqlCommand("Select WebID, NameSite, URL, IPPublic, Phones, isEnable from WEB", conn);
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -102,8 +102,8 @@ namespace TrackingDefaceDAO
                     conn.Open();
                 SqlCommand cmd = new SqlCommand("Insert into WEB values(@WebID, @NameSite, @URL,"
                                                 + "@IPPublic, @IPPrivate, @WebPriority, @Phones, " +
-                                                " @Emails, @searchText, @BanText, @isEnable)", conn);
-                cmd.Parameters.Add("@WebId", SqlDbType.Int).Value = web.webID;
+                                                " @Emails, @searchText, @WebStatus, @BanText, @isEnable)", conn);
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = web.webID;
                 cmd.Parameters.Add("@NameSite", SqlDbType.NVarChar).Value = web.nameSite;
                 cmd.Parameters.Add("@URL", SqlDbType.NVarChar).Value = web.uRL;
                 cmd.Parameters.Add("@IPPublic", SqlDbType.NVarChar).Value = web.ipPulbic;
@@ -115,6 +115,7 @@ namespace TrackingDefaceDAO
                 cmd.Parameters.Add("@WebStatus", SqlDbType.NVarChar).Value = web.webStatus;
                 cmd.Parameters.Add("@BanText", SqlDbType.NVarChar).Value = web.banText;
                 cmd.Parameters.Add("@isEnable", SqlDbType.Bit).Value = web.isEnable;
+
 
                 cmd.ExecuteNonQuery();
                 conn.Close();
@@ -134,12 +135,12 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Update WEB Set NameSite = @NameSite, URL = @URL,, IPPublic = @IPublic" 
-                                    + " IPPrivate = @IPPrivate , WebPriority = @Webpriority"
-                                    + " Phones = @Phones, Emails = @Emails, searchText = @searchText"
+                SqlCommand cmd = new SqlCommand("Update WEB Set NameSite = @NameSite, URL = @URL, IPPublic = @IPPublic," 
+                                    + " IPPrivate = @IPPrivate , WebPriority = @Webpriority,"
+                                    + " Phones = @Phones, Emails = @Emails, searchText = @searchText, "
                                     + "WebStatus = @WebStatus, BanText = @BanText, isEnable = @isEnable"
                                     + " where WebID = @WebID", conn);
-                cmd.Parameters.Add("@WebId", SqlDbType.Int).Value = web.webID;
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = web.webID;
                 cmd.Parameters.Add("@NameSite", SqlDbType.NVarChar).Value = web.nameSite;
                 cmd.Parameters.Add("@URL", SqlDbType.NVarChar).Value = web.uRL;
                 cmd.Parameters.Add("@IPPublic", SqlDbType.NVarChar).Value = web.ipPulbic;
@@ -164,7 +165,7 @@ namespace TrackingDefaceDAO
         }
 
         /* Delete object Website by webID from database */
-        public bool Delete(string webID)
+        public bool Delete(int webID)
         {
             try
             {

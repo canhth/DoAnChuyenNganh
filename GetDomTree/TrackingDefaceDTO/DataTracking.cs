@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TrackingDefaceDTO
 {
-    class DataTracking
+    public class DataTracking
     {
+
     }
 }

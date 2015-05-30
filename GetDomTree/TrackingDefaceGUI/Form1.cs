@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,9 +18,10 @@ namespace TrackingDefaceGUI
     public partial class Form1 : Form
     {
         WebBUS webBUS = new WebBUS();
-        DataTable dtWeb;
         Web web = new Web();
         string abc = null;
+        Stopwatch timer = new Stopwatch();
+
         public Form1()
         {
             InitializeComponent();
@@ -27,36 +29,22 @@ namespace TrackingDefaceGUI
 
         private void btnGet_Click(object sender, EventArgs e)
         {
-            //GetDomTree getDom = new GetDomTree();
-
-           // getDom.test();
-           //getDom.test();
-           //outPutTxt.Text = getDom.tessst(); 
-        }
-
-       
+            
+        } 
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            DataTable DTWEB = webBUS.GetAllRecords();
-            dataGridViewWeb.DataSource = DTWEB;
-            
-            dtWeb = webBUS.GetAllWebEnable(1);
-            listViewWeb.LargeImageList = imageListView;
-            for (int i = 0; i < dtWeb.Rows.Count; i++)
+            webBUS.LoadDataTable(dataGridViewWeb);
+            webBUS.LoadListView(listViewWeb, imageListView);
+            Stopwatch runTime = new Stopwatch();
+            for (int i = 0; i < 10000; i++)
             {
-                DataRow datarow = dtWeb.Rows[i];
-                ListViewItem listItem = new ListViewItem(datarow["NameSite"].ToString());
-                listItem.ImageIndex = 1;
-                listItem.SubItems.Add(datarow["URL"].ToString());   //1
-                listItem.SubItems.Add(datarow["WebStatus"].ToString()); //2
-                listItem.SubItems.Add(datarow["IPPublic"].ToString()); //3
-                listItem.SubItems.Add(datarow["WebPriority"].ToString()); //4
-                listItem.SubItems.Add(datarow["Phones"].ToString());// 5
-                listItem.SubItems.Add(datarow["Emails"].ToString()); //6
-                listItem.SubItems.Add(datarow["isEnable"].ToString()); //7
-
-                listViewWeb.Items.Add(listItem);
+                if (i == 9999)
+                {
+                    runTime.Start();
+                    webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
+                    runTime.Stop();
+                }
             }
         }
 
@@ -64,8 +52,6 @@ namespace TrackingDefaceGUI
         {
            
             if (listViewWeb.SelectedItems.Count == 0) return;
-            //nameLabel.Text = dtWeb.rows
-
             ListViewItem item = listViewWeb.SelectedItems[0];
             nameLabel.Text = item.SubItems[0].Text;
             urlLabel.Text = item.SubItems[1].Text;
@@ -78,21 +64,37 @@ namespace TrackingDefaceGUI
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void addBtn_Click(object sender, EventArgs e)
         {
-            abc = webBUS.listString("http://www.hochiminhcity.gov.vn/");
+            webBUS.InsertDataWeb(dataGridViewWeb, nameSileTxt, urlTxt, ipPublicTxt, priorityTxt, phoneTxt, emailTxt, findTextTxt, banTextTxt, checkBoxEnable);
         }
 
-        private void btnGet_Click_1(object sender, EventArgs e)
+        private void deleteBtn_Click(object sender, EventArgs e)
         {
-            if (abc == null)
+            webBUS.DeleteWeb(dataGridViewWeb);
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+            webBUS.UpdateWeb(dataGridViewWeb, nameSileTxt, urlTxt, ipPublicTxt, priorityTxt, phoneTxt, emailTxt, findTextTxt, banTextTxt, checkBoxEnable);
+        
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Stopwatch runTime = new Stopwatch();
+            for (int i = 0 ; i < 10000; i++)
             {
-                abc = webBUS.listString("http://www.hochiminhcity.gov.vn/");
+                if (i == 9999)
+                {
+                    runTime.Start();
+                    webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
+                    runTime.Stop();
+                } 
             }
-             
         }
 
-
+       
 
   
 
