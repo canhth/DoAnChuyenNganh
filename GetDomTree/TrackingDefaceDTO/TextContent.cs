@@ -12,18 +12,17 @@ namespace TrackingDefaceDTO
         public string Content { get; set; }
         public DateTime TimeCheck { get; set; }
         public string TextResult { get; set; }
-        public Web webid { get; set; }
+        public int WebID { get; set; }
 
         public TextContent() { }
 
-        public TextContent(int id, string content, DateTime timeCheck, string result, int webID)
-        {
-            Web webid = new Web();
+        public TextContent(int id, string content, DateTime timeCheck, string result, int webid)
+        {  
             this.ContentID = id;
             this.Content = content;
             this.TimeCheck = timeCheck;
-            this.TextResult = result;
-            webid.webID = webID;
+            this.TextResult = result;     
+            this.WebID = webid;
         }
     }
 }

@@ -9,17 +9,56 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Security.Cryptography;
+
 
 namespace TrackingDefaceBUS.Utils
 {
     public class UtilsHtmlAgility
     {
-        int i, j, k, loi, saiSo;
-        HtmlDocument doc = new HtmlDocument();
+        public static List<string> ImageList;
+        public static List<string> ImageHash;
+        // Creating a list array
+        //public static byte[] encryptData(string data)
+        //{
+        //    System.Security.Cryptography.MD5CryptoServiceProvider md5Hasher = new System.Security.Cryptography.MD5CryptoServiceProvider();
+        //    byte[] hashedBytes;
+        //    System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+        //    hashedBytes = md5Hasher.ComputeHash(encoder.GetBytes(data));
+        //    return hashedBytes;
+        //}
+        //public static string md5(string data)
+        //{
+        //    return BitConverter.ToString(encryptData(data)).Replace("-", "").ToLower();
+        //}
 
-        public string GetChildLink(string url)
+        static string getMd5Hash(byte[] buffer)
         {
-            String str2;
+            MD5 md5Hasher = MD5.Create();
+
+            byte[] data = md5Hasher.ComputeHash(buffer);
+
+            StringBuilder sBuilder = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            return sBuilder.ToString();
+        }
+
+        static byte[] imageToByteArray(Image image)
+        {
+            MemoryStream ms = new MemoryStream();
+            image.Save(ms, ImageFormat.Jpeg);
+            return ms.ToArray();
+        }
+        public static string GetContent(string url)
+        {
+            string str2;
+            
+            HtmlDocument doc = new HtmlDocument();
             // Call the page and get the generated HTML
             HtmlAgilityPack.HtmlNode.ElementsFlags["br"] = HtmlAgilityPack.HtmlElementFlag.Empty;
             doc.OptionWriteEmptyNodes = true;
@@ -29,7 +68,6 @@ namespace TrackingDefaceBUS.Utils
                 Stream stream = webRequest.GetResponse().GetResponseStream();
                 doc.Load(stream);
                 stream.Close();
-
             }
             catch (System.UriFormatException uex)
             {
@@ -43,33 +81,58 @@ namespace TrackingDefaceBUS.Utils
             }
             string output = doc.DocumentNode.OuterHtml;
 
-            Console.WriteLine("Chuoi chua bo HTML");
-            Console.WriteLine(output.Length);
+            GetChildLink(doc, url);
 
             str2 = Regex.Replace(output, "<.*?>", string.Empty);
-
-            Console.WriteLine("Chuoi da bo HTML");
-            Console.WriteLine(str2.Length);  
-            return "";
+            str2 = str2.Trim();
+ 
+            return str2;
         }
 
-        public string GetChildLink ()
+        public static List<string> GetChildLink(HtmlDocument doc, string url)
         {
-            string links = "";
+            string links = "";          
+            ImageList = new List<string>();
             var output1 = doc.DocumentNode.SelectNodes("//a[@class='tmenu']");
-            foreach (var ii in output1)
+            foreach (var image in doc.DocumentNode.SelectNodes("//img"))
             {
-                var data = ii.Attributes["href"].Value;
-                links += data.ToString();
-                Console.WriteLine(data);
+                var src = image.GetAttributeValue("src", null);
+                links = url + src.ToString();
+                ImageList.Add(links);
+                Console.WriteLine(links);              
             }
-            return links;
+            return ImageList;
         }
+    
+        public static List<string> HashImage ()
+        {
+            ImageHash = new List<string>();
+            string hash = "";
+            var client = new WebClient();
+            foreach (string url in ImageList)
+            {
+                 byte[] data = client.DownloadData(url);
+                 using (MemoryStream mem = new MemoryStream(data)) 
+                {
+                    var yourImage = Image.FromStream(mem) ; 
+                    // If you want it as Png
+                    yourImage.Save("D:/TestImage/image.png", ImageFormat.Jpeg) ;
+                    Image imagee = Image.FromFile(@"D:/TestImage/image.png");
+                    byte[] buffer = imageToByteArray(imagee);
+                    hash = getMd5Hash(buffer);
+                    ImageHash.Add(hash);
+                 }
+            }
+            return ImageHash;
+        }
+            
+        
 
         // Thuat toan
-        public bool SoSanh(string s1, string s2)
+        public static bool  SoSanh(string s1, string s2)
         {
-            saiSo = (int)Math.Round(s1.Length * 0.3);
+            int i, j, k, loi, saiSo;
+            saiSo = (int)Math.Round(s1.Length * 0.4);
             Console.WriteLine("Sai so la");
             Console.WriteLine(saiSo);
             if (s1.Length < (s2.Length - saiSo) || s1.Length > (s2.Length + saiSo))

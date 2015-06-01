@@ -19,12 +19,11 @@ namespace TrackingDefaceBUS
     public class WebBUS 
     {
 
-        WebDAO objectWeb = new WebDAO();
-        Utils.UtilsHtmlAgility utils = new Utils.UtilsHtmlAgility();
+        WebDAO objectWeb = new WebDAO();      
 
         public bool CheckWebSite(string url)
         {
-            utils.GetChildLink(url);
+            Utils.UtilsHtmlAgility.GetContent(url);
             return true;
         }
 
@@ -85,12 +84,7 @@ namespace TrackingDefaceBUS
             }
             else
                 MessageBox.Show("Vui long nhap day du thong tin");
-        }
-
-        public string listString(string url)
-        {
-            return utils.GetChildLink(url);
-        }     
+        }  
 
         public void UpdateWeb (DataGridView dtGridWeb, TextBox nameSite, TextBox URL, TextBox ipPublic, TextBox priority, 
                                     TextBox phones, TextBox emails, RichTextBox findText, RichTextBox banText, CheckBox isEnable)
@@ -122,7 +116,10 @@ namespace TrackingDefaceBUS
             objectWeb.Delete(webID);
             LoadDataTable(dtGridWeb);
         }
-        
 
+        public DataTable GetWebSiteEnable(int isEnable)
+        {
+            return objectWeb.GetWebSiteEnable(1);
+        }
     }
 }

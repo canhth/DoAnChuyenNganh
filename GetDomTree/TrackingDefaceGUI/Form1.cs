@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using TrackingDefaceDAO;
 using TrackingDefaceBUS;
 using TrackingDefaceDTO;
+using TrackingDefaceBUS.Utils;
+
 
 namespace TrackingDefaceGUI
 {
@@ -19,7 +21,10 @@ namespace TrackingDefaceGUI
     {
         WebBUS webBUS = new WebBUS();
         Web web = new Web();
-        string abc = null;
+        TextContentBUS textContentBUS = new TextContentBUS();
+        TextContentDAO daoTest = new TextContentDAO();
+
+
         Stopwatch timer = new Stopwatch();
 
         public Form1()
@@ -32,20 +37,26 @@ namespace TrackingDefaceGUI
             
         } 
 
+        
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
+
             webBUS.LoadDataTable(dataGridViewWeb);
             webBUS.LoadListView(listViewWeb, imageListView);
-            Stopwatch runTime = new Stopwatch();
-            for (int i = 0; i < 10000; i++)
-            {
-                if (i == 9999)
-                {
-                    runTime.Start();
-                    webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
-                    runTime.Stop();
-                }
-            }
+            timerRunTracking.Start();
+            richTextBox1.Text = UtilsHtmlAgility.GetContent("http://www.quan2.hochiminhcity.gov.vn");
+            TextContent textContent = daoTest.GetContentWebIDByWebID(1);
+            richTextBoxTest.Text = textContent.Content;
+
+            SendEmail.SendeMail();
+
+            //Stopwatch runTime = new Stopwatch();
+            //runTime.Start();
+            //webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
+            //runTime.Stop();
+            //Console.WriteLine(runTime.Elapsed.Seconds);    
         }
 
         private void listViewWeb_SelectedIndexChanged(object sender, EventArgs e)
@@ -92,8 +103,28 @@ namespace TrackingDefaceGUI
                     runTime.Stop();
                 } 
             }
+        
+        
         }
 
+        //public void testTimer ()
+        //{
+        //    Action work = () => Console.WriteLine(DateTime.Now.ToLongTimeString());
+
+        //    Scheduler.Default.Schedule(
+        //        // start in so many seconds
+        //        TimeSpan.FromSeconds(60 - DateTime.Now.Second),
+        //        // then run every minute
+        //        () => Scheduler.Default.SchedulePeriodic(TimeSpan.FromMinutes(1), work));
+
+        //    Console.WriteLine("Press return.");
+        //    Console.ReadLine();
+        //}
+
+        private void timerRunTracking_Tick(object sender, EventArgs e)
+        {
+            textContentBUS.TrackingDeface(dataGridViewWeb);
+        }
        
 
   

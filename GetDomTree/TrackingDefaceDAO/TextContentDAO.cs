@@ -13,14 +13,14 @@ namespace TrackingDefaceDAO
     {
         public TextContentDAO() : base() { }
 
-        /* Get all */
+        ///* Get all */
         public DataTable GetAll()
         {
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Select * from TEXT_CONTENT");
+                SqlCommand cmd = new SqlCommand("Select ContentID from TEXT_CONTENT", conn);
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -33,23 +33,27 @@ namespace TrackingDefaceDAO
                 throw;
             }
         }
-
+        
         /* Get Content by WebID */
-        public DataTable GetContentByWebID( string webID)
+        public TextContent GetContentWebIDByWebID(int webID)
         {
+            TextContent content = new TextContent();
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("select Content from TEXT_CONTENT "
-                                                + " inner join WEB on WEB.WebID = TEXT_CONTENT.WebID"
-                                                + " where TEXT_CONTENT.WebID = @webID ", conn);
-                cmd.Parameters.Add("@webID", SqlDbType.Int).Value = webID;
-                SqlDataAdapter adap = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adap.Fill(dt);
+                SqlCommand cmd = new SqlCommand("select Content, WebID from TEXT_CONTENT "
+                                                + " where WebID = @WebID ", conn);
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = webID;
+                SqlDataReader rd = cmd.ExecuteReader();
+                if (rd.Read())
+                {
+                    content.WebID = (int)rd["WebID"];
+                    content.Content = rd["Content"].ToString().Trim();
+                    rd.Close();
+                }
                 conn.Close();
-                return dt;
+                return content;
             }
             catch (Exception)
             {
@@ -66,10 +70,11 @@ namespace TrackingDefaceDAO
                     conn.Open();
                 SqlCommand cmd = new SqlCommand("Insert into TEXT_CONTENT values(@ContetnID, @Content, @TimeCheck, @TextResult, @WebID)", conn);
                 cmd.Parameters.Add("@ContetnID", SqlDbType.Int).Value = textContent.ContentID;
-                cmd.Parameters.Add("@Content", SqlDbType.NVarChar).Value = textContent.Content;
+                //cmd.Parameters.Add("@Content", SqlDbType.NText).Value = textContent.Content;
+                cmd.Parameters.AddWithValue(@"Content", textContent.Content);
                 cmd.Parameters.Add("@TimeCheck", SqlDbType.DateTime).Value = textContent.TimeCheck;
                 cmd.Parameters.Add("@TextResult", SqlDbType.NVarChar).Value = textContent.TextResult;
-                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = textContent.webid.webID;
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = textContent.WebID;
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;
@@ -89,13 +94,12 @@ namespace TrackingDefaceDAO
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
                 SqlCommand cmd = new SqlCommand("Update TEXT_CONTENT Set Content = @Content, TimeCheck = @TimeCheck,"
-                                    + "TextResult = @TextResult, Email = @Email"
-                                    + " where ContetnID = @ContetnID", conn);
-                cmd.Parameters.Add("@ContetnID", SqlDbType.Int).Value = textContent.ContentID;
-                cmd.Parameters.Add("@Content", SqlDbType.NVarChar).Value = textContent.Content;
+                                    + "TextResult = @TextResult"
+                                    + " where WebID = @WebID", conn);
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = textContent.WebID;
+                cmd.Parameters.Add("@Content", SqlDbType.NText).Value = textContent.Content;
                 cmd.Parameters.Add("@TimeCheck", SqlDbType.DateTime).Value = textContent.TimeCheck;
                 cmd.Parameters.Add("@TextResult", SqlDbType.NVarChar).Value = textContent.TextResult;
-                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = textContent.webid.webID;
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;
