@@ -889,7 +889,7 @@
             // 
             // timerRunTracking
             // 
-            this.timerRunTracking.Interval = 6000;
+            this.timerRunTracking.Interval = 30000;
             this.timerRunTracking.Tick += new System.EventHandler(this.timerRunTracking_Tick);
             // 
             // Form1
