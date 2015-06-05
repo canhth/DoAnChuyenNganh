@@ -39,7 +39,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("select * from WEB "
+                SqlCommand cmd = new SqlCommand("select WebID, NameSite, URL, IPPublic, Phones, Emails, WebStatus, WebPriority, isEnable from WEB "
                                                 + " where isEnable = @isEnable ", conn);
                 cmd.Parameters.Add("@isEnable", SqlDbType.Bit).Value = isEnable;
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);

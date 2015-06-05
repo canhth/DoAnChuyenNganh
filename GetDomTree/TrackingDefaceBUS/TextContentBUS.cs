@@ -56,13 +56,13 @@ namespace TrackingDefaceBUS
                 else
                 {
                     string result = "Safe";
-                    InsertTextContent(dtGridWeb, webID, content, result);
+                    InsertTextContent(webID, content, result);
                 } 
             }
                 return true;
         }
 
-        public void InsertTextContent(DataGridView dtGridWeb, int webID, string content, string result)
+        public void InsertTextContent(int webID, string content, string result)
         {
             TextContent textContent = new TextContent();
             DataTable dtAllTextContent = objectTextContent.GetAll();
@@ -83,6 +83,11 @@ namespace TrackingDefaceBUS
             textContent.TextResult = result;
             textContent.WebID = webID;
             objectTextContent.Update(textContent);
+        }
+
+        public bool DeleteTextContent(int id)
+        {
+            return objectTextContent.Delete(id);
         }
     }
 }

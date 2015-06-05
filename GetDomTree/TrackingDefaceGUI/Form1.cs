@@ -12,7 +12,8 @@ using System.Windows.Forms;
 using TrackingDefaceDAO;
 using TrackingDefaceBUS;
 using TrackingDefaceDTO;
-using TrackingDefaceBUS.Utils;
+using TrackingDefaceBUS.Application;
+using System.Xml;
 
 
 namespace TrackingDefaceGUI
@@ -23,7 +24,9 @@ namespace TrackingDefaceGUI
         Web web = new Web();
         TextContentBUS textContentBUS = new TextContentBUS();
         TextContentDAO daoTest = new TextContentDAO();
+        ImageContentDAO daoImage = new ImageContentDAO();
 
+        TrackingDeface application = new TrackingDeface();
 
         Stopwatch timer = new Stopwatch();
 
@@ -37,21 +40,21 @@ namespace TrackingDefaceGUI
             
         } 
 
-        
-
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
             webBUS.LoadDataTable(dataGridViewWeb);
             webBUS.LoadListView(listViewWeb, imageListView);
             timerRunTracking.Start();
-            richTextBox1.Text = UtilsHtmlAgility.GetContent("http://www.quan2.hochiminhcity.gov.vn");
-            TextContent textContent = daoTest.GetContentWebIDByWebID(1);
-            richTextBoxTest.Text = textContent.Content;
 
-            SendEmail.SendeMail();
+            TrackingDefaceBUS.Utils.UtilsHtmlAgility.GetContent("http://www.quan1.hochiminhcity.gov.vn/");
 
+            ImageContent imageContent = new ImageContent();
+
+
+            imageContent = daoImage.GetContentImageIDByID(2);
+
+            
             //Stopwatch runTime = new Stopwatch();
             //runTime.Start();
             //webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
@@ -123,7 +126,7 @@ namespace TrackingDefaceGUI
 
         private void timerRunTracking_Tick(object sender, EventArgs e)
         {
-            textContentBUS.TrackingDeface(dataGridViewWeb);
+            application.TrackingDefaceWebSite();
         }
        
 

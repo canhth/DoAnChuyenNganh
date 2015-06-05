@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using TrackingDefaceDTO;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml;
 
 namespace TrackingDefaceDAO
 {
-    public class TextContentDAO : DBConnection
+    public class ImageContentDAO : DBConnection
     {
-        public TextContentDAO() : base() { }
-
+        public ImageContentDAO() : base() { }
         ///* Get all */
         public DataTable GetAll()
         {
@@ -20,7 +20,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Select ContentID from TEXT_CONTENT", conn);
+                SqlCommand cmd = new SqlCommand("Select ID from IMAGE_CONTENT ", conn);
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -33,23 +33,27 @@ namespace TrackingDefaceDAO
                 throw;
             }
         }
-        
+
         /* Get Content by WebID */
-        public TextContent GetContentWebIDByWebID(int webID)
+        public ImageContent GetContentImageIDByID(int webID)
         {
-            TextContent content = new TextContent();
+            ImageContent content = new ImageContent();
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("select Content, WebID from TEXT_CONTENT "
-                                                + " where WebID = @WebID ", conn);
+                
+                SqlCommand cmd = new SqlCommand("select ID, Content, WebID from IMAGE_CONTENT "
+                                                + " where WebID = @WebID  ", conn);
                 cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = webID;
+                //cmd.Parameters.Add("@ID", SqlDbType.Int).Value = webID;
                 SqlDataReader rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
-                    content.WebID = (int)rd["WebID"];
+                    content.id = (int)rd["ID"];
+                    content.webID = (int)rd["WebID"];
                     content.Content = rd["Content"].ToString().Trim();
+                    //System.Diagnostics.Trace.WriteLine(rd["Content"].ToString());                  
                     rd.Close();
                 }
                 conn.Close();
@@ -62,19 +66,16 @@ namespace TrackingDefaceDAO
             }
         }
 
-        public bool Insert(TextContent textContent)
+        public bool Insert(ImageContent imageContent)
         {
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Insert into TEXT_CONTENT values(@ContetnID, @Content, @TimeCheck, @TextResult, @WebID)", conn);
-                cmd.Parameters.Add("@ContetnID", SqlDbType.Int).Value = textContent.ContentID;
-                //cmd.Parameters.Add("@Content", SqlDbType.NText).Value = textContent.Content;
-                cmd.Parameters.AddWithValue(@"Content", textContent.Content);
-                cmd.Parameters.Add("@TimeCheck", SqlDbType.DateTime).Value = textContent.TimeCheck;
-                cmd.Parameters.Add("@TextResult", SqlDbType.NVarChar).Value = textContent.TextResult;
-                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = textContent.WebID;
+                SqlCommand cmd = new SqlCommand("Insert into IMAGE_CONTENT values(@ID, @Content, @WebID)", conn);
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = imageContent.id;
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = imageContent.webID;
+                cmd.Parameters.Add("@Content", SqlDbType.Xml).Value = (new XmlTextReader(imageContent.Content, XmlNodeType.Document, null));
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;
@@ -87,19 +88,16 @@ namespace TrackingDefaceDAO
             }
         }
         /* Update user in to Database */
-        public bool Update(TextContent textContent)
+        public bool Update(ImageContent imageContent)
         {
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Update TEXT_CONTENT Set Content = @Content, TimeCheck = @TimeCheck,"
-                                    + "TextResult = @TextResult"
-                                    + " where WebID = @WebID", conn);
-                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = textContent.WebID;
-                cmd.Parameters.Add("@Content", SqlDbType.NText).Value = textContent.Content;
-                cmd.Parameters.Add("@TimeCheck", SqlDbType.DateTime).Value = textContent.TimeCheck;
-                cmd.Parameters.Add("@TextResult", SqlDbType.NVarChar).Value = textContent.TextResult;
+                SqlCommand cmd = new SqlCommand("Update IMAGE_CONTENT Set Content = @Content, WebID = @WebID where ID = @ID", conn);
+                cmd.Parameters.Add("@Content", SqlDbType.Xml).Value = (new XmlTextReader(imageContent.Content, XmlNodeType.Document, null));
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = imageContent.webID;
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = imageContent.id;
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;
@@ -113,14 +111,14 @@ namespace TrackingDefaceDAO
         }
 
         /* Delete object User by userID from database */
-        public bool Delete(int ContentID)
+        public bool Delete(int ID)
         {
             try
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("DELETE from TEXT_CONTENT where ContentID = @ContentID ", conn);
-                cmd.Parameters.Add("@ContentID", SqlDbType.Int).Value = ContentID;
+                SqlCommand cmd = new SqlCommand("DELETE from IMAGE_CONTENT where ID = @ID ", conn);
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;

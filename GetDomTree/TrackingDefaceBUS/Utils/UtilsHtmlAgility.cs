@@ -14,6 +14,7 @@ using System.Drawing.Imaging;
 using System.Security.Cryptography;
 
 
+
 namespace TrackingDefaceBUS.Utils
 {
     public class UtilsHtmlAgility
@@ -34,26 +35,7 @@ namespace TrackingDefaceBUS.Utils
         //    return BitConverter.ToString(encryptData(data)).Replace("-", "").ToLower();
         //}
 
-        static string getMd5Hash(byte[] buffer)
-        {
-            MD5 md5Hasher = MD5.Create();
-
-            byte[] data = md5Hasher.ComputeHash(buffer);
-
-            StringBuilder sBuilder = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-            return sBuilder.ToString();
-        }
-
-        static byte[] imageToByteArray(Image image)
-        {
-            MemoryStream ms = new MemoryStream();
-            image.Save(ms, ImageFormat.Jpeg);
-            return ms.ToArray();
-        }
+        
         public static string GetContent(string url)
         {
             string str2;
@@ -66,26 +48,30 @@ namespace TrackingDefaceBUS.Utils
             {
                 var webRequest = HttpWebRequest.Create(url);
                 Stream stream = webRequest.GetResponse().GetResponseStream();
-                doc.Load(stream);
+                StreamReader reader = new StreamReader(stream, System.Text.Encoding.UTF8, true);
+                doc.Load(reader);
                 stream.Close();
             }
+
             catch (System.UriFormatException uex)
             {
                 Console.WriteLine("There was an error in the format of the url", uex);
                 throw;
             }
+
             catch (System.Net.WebException wex)
             {
                 Console.WriteLine("There was an error connecting to the url: ", wex);
                 throw;
             }
+
             string output = doc.DocumentNode.OuterHtml;
 
             GetChildLink(doc, url);
 
             str2 = Regex.Replace(output, "<.*?>", string.Empty);
             str2 = str2.Trim();
- 
+
             return str2;
         }
 
@@ -93,14 +79,29 @@ namespace TrackingDefaceBUS.Utils
         {
             string links = "";          
             ImageList = new List<string>();
-            var output1 = doc.DocumentNode.SelectNodes("//a[@class='tmenu']");
-            foreach (var image in doc.DocumentNode.SelectNodes("//img"))
+            foreach (var image in doc.DocumentNode.Descendants().Where(n => n.Name == "img"))
             {
                 var src = image.GetAttributeValue("src", null);
-                links = url + src.ToString();
+
+                if (src.Contains("http://"))
+                {
+                    links = src.ToString();                 
+                }
+                else
+                {
+                    if (src.Contains("/portal"))
+                    {
+                        src = src.Replace("/portal", "");
+                    }
+                       
+                    links = url + src.ToString();
+                }      
                 ImageList.Add(links);
                 Console.WriteLine(links);              
             }
+
+            HashImage();
+            UtilsHtmlAgility.WriteXML();
             return ImageList;
         }
     
@@ -111,23 +112,49 @@ namespace TrackingDefaceBUS.Utils
             var client = new WebClient();
             foreach (string url in ImageList)
             {
-                 byte[] data = client.DownloadData(url);
-                 using (MemoryStream mem = new MemoryStream(data)) 
+                try
                 {
-                    var yourImage = Image.FromStream(mem) ; 
-                    // If you want it as Png
-                    yourImage.Save("D:/TestImage/image.png", ImageFormat.Jpeg) ;
-                    Image imagee = Image.FromFile(@"D:/TestImage/image.png");
-                    byte[] buffer = imageToByteArray(imagee);
-                    hash = getMd5Hash(buffer);
-                    ImageHash.Add(hash);
-                 }
+                    byte[] data = client.DownloadData(url);
+                    using (MemoryStream mem = new MemoryStream(data))
+                    {
+                        var yourImage = Image.FromStream(mem);
+                        // If you want it as Png
+                        //yourImage.Save("D:/TestImage/image.png") ;
+                        //Image imagee = Image.FromFile(@"D:/TestImage/image.png");
+                        byte[] buffer = imageToByteArray(yourImage);
+                        hash = getMd5Hash(buffer);
+                        ImageHash.Add(hash);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                 
             }
+            
             return ImageHash;
         }
-            
-        
 
+        public static void WriteXML()
+        {
+            //var allProducts = new List<string>(ImageHash.Count + ImageList.Count);
+            //allProducts.AddRange(ImageList);
+            //allProducts.AddRange(ImageHash);
+            ImageList.AddRange(ImageHash);
+            StreamWriter file = new StreamWriter(@"D:/TestImage/SerializationOverview.xml");
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<String>));
+            writer.Serialize(file, ImageList);
+            file.Close();
+        }
+        public static List<string> ReadXML()
+        {
+            List<string> listImage = new List<string>();
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<String>));
+            System.IO.StreamReader file = new System.IO.StreamReader (@"D:/TestImage/SerializationOverview.xml");
+            listImage = (List<String>)reader.Deserialize(file);
+            return listImage;
+        }
         // Thuat toan
         public static bool  SoSanh(string s1, string s2)
         {
@@ -136,22 +163,15 @@ namespace TrackingDefaceBUS.Utils
             Console.WriteLine("Sai so la");
             Console.WriteLine(saiSo);
             if (s1.Length < (s2.Length - saiSo) || s1.Length > (s2.Length + saiSo))
-
                 return false;
-
             i = j = loi = 0;
-
             while (i < s2.Length && j < s1.Length)
             {
-
                 if (s2[i] != s1[j])
                 {
-
                     loi++;
-
                     for (k = 1; k <= saiSo; k++)
                     {
-
                         if ((i + k < s2.Length) && s2[i + k] == s1[j])
                         {
                             i += k;
@@ -175,6 +195,28 @@ namespace TrackingDefaceBUS.Utils
             if (loi <= saiSo)
                 return true;
             else return false;
+        }
+
+        /*  Function MD5 Image   */
+        static string getMd5Hash(byte[] buffer)
+        {
+            MD5 md5Hasher = MD5.Create();
+
+            byte[] data = md5Hasher.ComputeHash(buffer);
+
+            StringBuilder sBuilder = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            return sBuilder.ToString();
+        }
+
+        static byte[] imageToByteArray(Image image)
+        {
+            MemoryStream ms = new MemoryStream();
+            image.Save(ms, ImageFormat.Jpeg);
+            return ms.ToArray();
         }
     }
 }
