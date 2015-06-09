@@ -21,11 +21,11 @@ namespace TrackingDefaceBUS
 
         WebDAO objectWeb = new WebDAO();      
 
-        public bool CheckWebSite(string url)
-        {
-            Utils.UtilsHtmlAgility.GetContent(url);
-            return true;
-        }
+        //public bool CheckWebSite(string url)
+        //{
+        //    Utils.UtilsHtmlAgility.GetContent(url);
+        //    return true;
+        //}
 
         public DataTable GetAllRecords()
         {

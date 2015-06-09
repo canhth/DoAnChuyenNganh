@@ -19,24 +19,25 @@ namespace TrackingDefaceBUS.Utils
 {
     public class UtilsHtmlAgility
     {
-        public static List<string> ImageList;
-        public static List<string> ImageHash;
-        // Creating a list array
-        //public static byte[] encryptData(string data)
-        //{
-        //    System.Security.Cryptography.MD5CryptoServiceProvider md5Hasher = new System.Security.Cryptography.MD5CryptoServiceProvider();
-        //    byte[] hashedBytes;
-        //    System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-        //    hashedBytes = md5Hasher.ComputeHash(encoder.GetBytes(data));
-        //    return hashedBytes;
-        //}
-        //public static string md5(string data)
-        //{
-        //    return BitConverter.ToString(encryptData(data)).Replace("-", "").ToLower();
-        //}
+        //public static List<string> ImageList;
+        //public static List<string> ImageHash;
+        public UtilsHtmlAgility app;
+
+        public static byte[] encryptData(string data)
+        {
+            System.Security.Cryptography.MD5CryptoServiceProvider md5Hasher = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] hashedBytes;
+            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+            hashedBytes = md5Hasher.ComputeHash(encoder.GetBytes(data));
+            return hashedBytes;
+        }
+        public static string md5(string data)
+        {
+            return BitConverter.ToString(encryptData(data)).Replace("-", "").ToLower();
+        }
 
         
-        public static string GetContent(string url)
+        public string GetContent(string url)
         {
             string str2;
             
@@ -52,13 +53,11 @@ namespace TrackingDefaceBUS.Utils
                 doc.Load(reader);
                 stream.Close();
             }
-
             catch (System.UriFormatException uex)
             {
                 Console.WriteLine("There was an error in the format of the url", uex);
                 throw;
             }
-
             catch (System.Net.WebException wex)
             {
                 Console.WriteLine("There was an error connecting to the url: ", wex);
@@ -66,19 +65,21 @@ namespace TrackingDefaceBUS.Utils
             }
 
             string output = doc.DocumentNode.OuterHtml;
-
-            GetChildLink(doc, url);
+            List<string> ImageList = new List<string>();
+            ImageList = GetChildLink(doc, url);
+            List<string> ImageHash = new List<string>();
+            ImageHash = HashImage(ImageList);
 
             str2 = Regex.Replace(output, "<.*?>", string.Empty);
             str2 = str2.Trim();
-
+            WriteXML(ImageList, ImageHash);
             return str2;
         }
 
-        public static List<string> GetChildLink(HtmlDocument doc, string url)
+        public List<string> GetChildLink(HtmlDocument doc, string url)
         {
             string links = "";          
-            ImageList = new List<string>();
+            List<string> ImageList = new List<string>();
             foreach (var image in doc.DocumentNode.Descendants().Where(n => n.Name == "img"))
             {
                 var src = image.GetAttributeValue("src", null);
@@ -93,21 +94,20 @@ namespace TrackingDefaceBUS.Utils
                     {
                         src = src.Replace("/portal", "");
                     }
-                       
+                    if (url.Contains("default.aspx"))
+                        url = url.Replace("default.aspx", "");                      
                     links = url + src.ToString();
                 }      
                 ImageList.Add(links);
                 Console.WriteLine(links);              
             }
-
-            HashImage();
-            UtilsHtmlAgility.WriteXML();
+           
             return ImageList;
         }
     
-        public static List<string> HashImage ()
+        public List<string> HashImage (List<string> ImageList)
         {
-            ImageHash = new List<string>();
+            List<string> ImageHash = new List<string>();
             string hash = "";
             var client = new WebClient();
             foreach (string url in ImageList)
@@ -118,45 +118,39 @@ namespace TrackingDefaceBUS.Utils
                     using (MemoryStream mem = new MemoryStream(data))
                     {
                         var yourImage = Image.FromStream(mem);
-                        // If you want it as Png
-                        //yourImage.Save("D:/TestImage/image.png") ;
-                        //Image imagee = Image.FromFile(@"D:/TestImage/image.png");
                         byte[] buffer = imageToByteArray(yourImage);
                         hash = getMd5Hash(buffer);
                         ImageHash.Add(hash);
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    Console.WriteLine(ex);
-                }
-                 
-            }
-            
+                    hash = md5(url);
+                    ImageHash.Add(hash);
+                }                 
+            }           
             return ImageHash;
         }
 
-        public static void WriteXML()
+        public void WriteXML(List<string> ImageList, List<string> ImageHash)
         {
-            //var allProducts = new List<string>(ImageHash.Count + ImageList.Count);
-            //allProducts.AddRange(ImageList);
-            //allProducts.AddRange(ImageHash);
             ImageList.AddRange(ImageHash);
             StreamWriter file = new StreamWriter(@"D:/TestImage/SerializationOverview.xml");
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<String>));
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<string>));
             writer.Serialize(file, ImageList);
             file.Close();
         }
-        public static List<string> ReadXML()
-        {
-            List<string> listImage = new List<string>();
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<String>));
-            System.IO.StreamReader file = new System.IO.StreamReader (@"D:/TestImage/SerializationOverview.xml");
-            listImage = (List<String>)reader.Deserialize(file);
-            return listImage;
-        }
+        //public static List<string> ReadXML()
+        //{
+        //    List<string> listImage = new List<string>();
+        //    System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<String>));
+        //    System.IO.StreamReader file = new System.IO.StreamReader (@"D:/TestImage/SerializationOverview.xml");
+        //    listImage = (List<string>)reader.Deserialize(file);
+        //    file.Close();
+        //    return listImage;
+        //}
         // Thuat toan
-        public static bool  SoSanh(string s1, string s2)
+        public  bool  SoSanh(string s1, string s2)
         {
             int i, j, k, loi, saiSo;
             saiSo = (int)Math.Round(s1.Length * 0.4);

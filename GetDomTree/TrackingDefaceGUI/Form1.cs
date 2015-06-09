@@ -27,12 +27,22 @@ namespace TrackingDefaceGUI
         ImageContentDAO daoImage = new ImageContentDAO();
 
         TrackingDeface application = new TrackingDeface();
-
+        BackgroundWorker bg_wk;
+        BackgroundWorker bg_wk2;
         Stopwatch timer = new Stopwatch();
 
         public Form1()
         {
             InitializeComponent();
+            bg_wk = new BackgroundWorker();
+            bg_wk2 = new BackgroundWorker();
+            bg_wk2.DoWork += new DoWorkEventHandler(backgroundWorkerLevel2_DoWork);
+            bg_wk.WorkerReportsProgress = true;
+            bg_wk.WorkerSupportsCancellation = true;
+            
+            bg_wk.DoWork += new DoWorkEventHandler(backgroundWorker_DoWork);
+            bg_wk.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
+            bg_wk.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
         }
 
         private void btnGet_Click(object sender, EventArgs e)
@@ -46,14 +56,6 @@ namespace TrackingDefaceGUI
             webBUS.LoadDataTable(dataGridViewWeb);
             webBUS.LoadListView(listViewWeb, imageListView);
             timerRunTracking.Start();
-
-            TrackingDefaceBUS.Utils.UtilsHtmlAgility.GetContent("http://www.quan1.hochiminhcity.gov.vn/");
-
-            ImageContent imageContent = new ImageContent();
-
-
-            imageContent = daoImage.GetContentImageIDByID(2);
-
             
             //Stopwatch runTime = new Stopwatch();
             //runTime.Start();
@@ -96,18 +98,21 @@ namespace TrackingDefaceGUI
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Stopwatch runTime = new Stopwatch();
-            for (int i = 0 ; i < 10000; i++)
+            //Stopwatch runTime = new Stopwatch();
+            //for (int i = 0 ; i < 10000; i++)
+            //{
+            //    if (i == 9999)
+            //    {
+            //        runTime.Start();
+            //        webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
+            //        runTime.Stop();
+            //    } 
+            //}
+            if (bg_wk2.IsBusy != true)
             {
-                if (i == 9999)
-                {
-                    runTime.Start();
-                    webBUS.CheckWebSite("http://www.hochiminhcity.gov.vn/Pages/default.aspx");//dataGridViewWeb.CurrentRow.Cells[2].ToString());
-                    runTime.Stop();
-                } 
+                bg_wk2.RunWorkerAsync();
+                MessageBox.Show("Back Ground 2 dang su dung");
             }
-        
-        
         }
 
         //public void testTimer ()
@@ -126,7 +131,65 @@ namespace TrackingDefaceGUI
 
         private void timerRunTracking_Tick(object sender, EventArgs e)
         {
+            //application.TrackingDefaceWebSite();
+            if (bg_wk.IsBusy != true)
+            {
+                bg_wk.RunWorkerAsync();
+                MessageBox.Show("Back Ground 1 dang chay");
+            }
+        }
+
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
             application.TrackingDefaceWebSite();
+            //for (int i = 1; (i <= 10); i++)
+            //{
+            //    if ((bg_wk.CancellationPending == true))
+            //    {
+            //        e.Cancel = true;
+            //        break;
+            //    }
+            //    else
+            //    {
+            //        // Perform a time consuming operation and report progress.
+            //        System.Threading.Thread.Sleep(500);
+            //        bg_wk.ReportProgress((i * 10));
+            //    }
+            //}
+        }
+
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            textBoxTestBackground.Text = (e.ProgressPercentage.ToString() + "%");
+        }
+
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("Hoan thanh cong viec BG 1");
+            if ((e.Cancelled == true))
+            {
+                this.textBoxTestBackground.Text = "Canceled!";
+            }
+
+            else if (!(e.Error == null))
+            {
+                this.textBoxTestBackground.Text = ("Error: " + e.Error.Message);
+            }
+
+            else
+            {
+                this.textBoxTestBackground.Text = "Done!";
+            }
+        }
+
+        private void backgroundWorkerLevel2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            application.TrackingDefaceWebSite();
+        }
+
+        private void backgroundWorkerLevel2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("Hoan thanh cong viec BG 2");
         }
        
 

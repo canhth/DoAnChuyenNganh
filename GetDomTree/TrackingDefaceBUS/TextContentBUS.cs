@@ -23,44 +23,7 @@ namespace TrackingDefaceBUS
         TextContentDAO objectTextContent = new TextContentDAO();
         //Utils.UtilsHtmlAgility utils = new Utils.UtilsHtmlAgility();      
 
-        public bool TrackingDeface (DataGridView dtGridWeb)
-        {
-            
-            int webCount = dtGridWeb.RowCount;           
-            for (int i = 0; i < webCount - 1; i++ )
-            {
-                int webID = (int)dtGridWeb.Rows[i].Cells[0].Value;
-                string url = dtGridWeb.Rows[i].Cells[2].Value.ToString();
-                string content = Utils.UtilsHtmlAgility.GetContent(url);
-                TextContent textContent = objectTextContent.GetContentWebIDByWebID(webID);
-                
-                /* Check Web has content */
-                if (textContent.Content != null)
-                {
-                    string webContent = textContent.Content;
-                    string result = "";
-                    if (Utils.UtilsHtmlAgility.SoSanh(webContent, content))
-                    {
-                        result = "Safe";
-                        Console.WriteLine("Website :" + url + "  dang an toan.");
-                    }
-                    else
-                    {
-                        result = "Warning";
-                        Utils.SendEmail.SendeMail();
-                        Console.WriteLine("Website :" + url + "  da bi thay doi noi dung.");
-                    }
-
-                    UpdateTextContent(webID, content, result);
-                }
-                else
-                {
-                    string result = "Safe";
-                    InsertTextContent(webID, content, result);
-                } 
-            }
-                return true;
-        }
+        
 
         public void InsertTextContent(int webID, string content, string result)
         {
