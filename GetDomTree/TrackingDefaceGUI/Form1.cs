@@ -65,8 +65,7 @@ namespace TrackingDefaceGUI
         }
 
         private void listViewWeb_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           
+        {           
             if (listViewWeb.SelectedItems.Count == 0) return;
             ListViewItem item = listViewWeb.SelectedItems[0];
             nameLabel.Text = item.SubItems[0].Text;
@@ -77,7 +76,6 @@ namespace TrackingDefaceGUI
             emailLabel.Text = item.SubItems[6].Text;
             enableLabel.Text = item.SubItems[7].Text;
             statusLabel.Text = item.SubItems[2].Text;
-
         }
 
         private void addBtn_Click(object sender, EventArgs e)
@@ -142,6 +140,7 @@ namespace TrackingDefaceGUI
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             application.TrackingDefaceWebSite();
+           
             //for (int i = 1; (i <= 10); i++)
             //{
             //    if ((bg_wk.CancellationPending == true))
@@ -179,6 +178,7 @@ namespace TrackingDefaceGUI
             else
             {
                 this.textBoxTestBackground.Text = "Done!";
+                webBUS.LoadListView(listViewWeb, imageListView);
             }
         }
 
@@ -189,6 +189,7 @@ namespace TrackingDefaceGUI
 
         private void backgroundWorkerLevel2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            webBUS.LoadListView(listViewWeb, imageListView);
             MessageBox.Show("Hoan thanh cong viec BG 2");
         }
        

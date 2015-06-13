@@ -40,13 +40,13 @@ namespace TrackingDefaceBUS
 
         public void LoadListView(ListView listViewWeb, ImageList imageListView)
         {
+            listViewWeb.Clear();
             DataTable dtWeb = objectWeb.GetWebSiteEnable(1);
             listViewWeb.LargeImageList = imageListView;
             for (int i = 0; i < dtWeb.Rows.Count; i++)
             {
                 DataRow datarow = dtWeb.Rows[i];
                 ListViewItem listItem = new ListViewItem(datarow["NameSite"].ToString());
-                listItem.ImageIndex = 1;
                 listItem.SubItems.Add(datarow["URL"].ToString());   //1
                 listItem.SubItems.Add(datarow["WebStatus"].ToString()); //2
                 listItem.SubItems.Add(datarow["IPPublic"].ToString()); //3
@@ -54,7 +54,10 @@ namespace TrackingDefaceBUS
                 listItem.SubItems.Add(datarow["Phones"].ToString());// 5
                 listItem.SubItems.Add(datarow["Emails"].ToString()); //6
                 listItem.SubItems.Add(datarow["isEnable"].ToString()); //7
-
+                if (datarow["WebStatus"].ToString() == "Safe")
+                    listItem.ImageIndex = 1;
+                else
+                    listItem.ImageIndex = 0;
                 listViewWeb.Items.Add(listItem);
             }
         }

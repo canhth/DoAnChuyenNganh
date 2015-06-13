@@ -45,8 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\Define.cs" />
     <Compile Include="Application\TrackingDeface.cs" />
     <Compile Include="DataTrackingBUS.cs" />
+    <Compile Include="EmailBUS.cs" />
     <Compile Include="ImageContentBUS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextContentBUS.cs" />

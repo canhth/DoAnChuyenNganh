@@ -26,7 +26,7 @@ namespace TrackingDefaceBUS.Application
         TextContentBUS objectTextContentBUS = new TextContentBUS();
         ImageContentBUS objectImageContetBUS = new ImageContentBUS();
         Utils.UtilsHtmlAgility objectUtils = new Utils.UtilsHtmlAgility();
-
+        
 
         public bool TrackingDefaceWebSite()
         {
@@ -125,18 +125,6 @@ namespace TrackingDefaceBUS.Application
         /*  So sanh trong so Image   */
         public string SoSanhImage(List<string> oldList, List<string> newList)
         {
-            //List<string> oldList = new List<string>();
-            //List<string> newList = new List<string>();
-
-            //oldList.Add("abc");
-            //oldList.Add("abc2");
-            //oldList.Add("abc3");
-
-            //newList.Add("abc");
-            //newList.Add("abc2");
-            //newList.Add("abc3");
-            //newList.Add("def");
-
             string result = "";
             int caseResult = 0;
 

@@ -19,8 +19,7 @@ namespace TrackingDefaceBUS.Utils
 {
     public class UtilsHtmlAgility
     {
-        //public static List<string> ImageList;
-        //public static List<string> ImageHash;
+
         public UtilsHtmlAgility app;
 
         public static byte[] encryptData(string data)
@@ -90,9 +89,9 @@ namespace TrackingDefaceBUS.Utils
                 }
                 else
                 {
-                    if (src.Contains("/portal"))
+                    if (src.Contains("/Portal"))
                     {
-                        src = src.Replace("/portal", "");
+                        src = src.Replace("/Portal", "");
                     }
                     if (url.Contains("default.aspx"))
                         url = url.Replace("default.aspx", "");                      
