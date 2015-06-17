@@ -35,7 +35,16 @@ namespace TrackingDefaceBUS
         public void LoadDataTable(DataGridView dataGridViewWeb)
         {
             DataTable dtWeb = objectWeb.GetAll();
-            dataGridViewWeb.DataSource = dtWeb;        
+            dataGridViewWeb.DataSource = dtWeb;
+
+            dataGridViewWeb.Columns["IPPrivate"].Visible = false;
+            dataGridViewWeb.Columns["Emails"].Visible = false;
+            dataGridViewWeb.Columns["Phones"].Visible = false;
+            dataGridViewWeb.Columns["searchText"].Visible = false;
+            dataGridViewWeb.Columns["WebStatus"].Visible = false;
+            dataGridViewWeb.Columns["BanText"].Visible = false;
+            dataGridViewWeb.Columns["WebStatus"].Visible = false;
+            dataGridViewWeb.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         public void LoadListView(ListView listViewWeb, ImageList imageListView)

@@ -104,15 +104,12 @@
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.textBoxTestBackground = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.richTextBoxTest = new System.Windows.Forms.RichTextBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.imageListMenu = new System.Windows.Forms.ImageList(this.components);
             this.imageListButton = new System.Windows.Forms.ImageList(this.components);
             this.timerRunTracking = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerLevel2 = new System.ComponentModel.BackgroundWorker();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -131,7 +128,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWeb)).BeginInit();
             this.flowLayoutPanel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -499,6 +495,7 @@
             this.button3.TabIndex = 2;
             this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -588,6 +585,7 @@
             this.dataGridViewWeb.RowTemplate.Height = 24;
             this.dataGridViewWeb.Size = new System.Drawing.Size(534, 515);
             this.dataGridViewWeb.TabIndex = 0;
+            this.dataGridViewWeb.Click += new System.EventHandler(this.dataGridViewWeb_Click);
             // 
             // flowLayoutPanel3
             // 
@@ -854,9 +852,6 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.textBoxTestBackground);
-            this.tabPage3.Controls.Add(this.richTextBox1);
-            this.tabPage3.Controls.Add(this.richTextBoxTest);
             this.tabPage3.Location = new System.Drawing.Point(4, 64);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -865,28 +860,15 @@
             this.tabPage3.Text = "  Manager User  ";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // textBoxTestBackground
+            // tabPage4
             // 
-            this.textBoxTestBackground.Location = new System.Drawing.Point(539, 29);
-            this.textBoxTestBackground.Name = "textBoxTestBackground";
-            this.textBoxTestBackground.Size = new System.Drawing.Size(100, 34);
-            this.textBoxTestBackground.TabIndex = 2;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(655, 76);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(439, 273);
-            this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "";
-            // 
-            // richTextBoxTest
-            // 
-            this.richTextBoxTest.Location = new System.Drawing.Point(49, 76);
-            this.richTextBoxTest.Name = "richTextBoxTest";
-            this.richTextBoxTest.Size = new System.Drawing.Size(456, 273);
-            this.richTextBoxTest.TabIndex = 0;
-            this.richTextBoxTest.Text = "";
+            this.tabPage4.Location = new System.Drawing.Point(4, 64);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(1227, 593);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "   Email   ";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // imageListMenu
             // 
@@ -902,7 +884,7 @@
             // 
             // timerRunTracking
             // 
-            this.timerRunTracking.Interval = 10000;
+            this.timerRunTracking.Interval = 360000;
             this.timerRunTracking.Tick += new System.EventHandler(this.timerRunTracking_Tick);
             // 
             // backgroundWorker
@@ -915,16 +897,6 @@
             // 
             this.backgroundWorkerLevel2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerLevel2_DoWork);
             this.backgroundWorkerLevel2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerLevel2_RunWorkerCompleted);
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 64);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1227, 593);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "   Email   ";
-            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -957,8 +929,6 @@
             this.flowLayoutPanel3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1038,10 +1008,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.CheckBox checkBoxEnable;
         private System.Windows.Forms.Timer timerRunTracking;
-        private System.Windows.Forms.RichTextBox richTextBoxTest;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
-        private System.Windows.Forms.TextBox textBoxTestBackground;
         private System.ComponentModel.BackgroundWorker backgroundWorkerLevel2;
         private System.Windows.Forms.TabPage tabPage4;
 

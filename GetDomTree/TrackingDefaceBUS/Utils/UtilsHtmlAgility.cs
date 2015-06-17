@@ -13,8 +13,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Security.Cryptography;
 
-
-
 namespace TrackingDefaceBUS.Utils
 {
     public class UtilsHtmlAgility
@@ -89,9 +87,10 @@ namespace TrackingDefaceBUS.Utils
                 }
                 else
                 {
-                    if (src.Contains("/Portal"))
+                    if (src.Contains("/Portal") || src.Contains("/portal"))
                     {
                         src = src.Replace("/Portal", "");
+                        src = src.Replace("/portal", "");
                     }
                     if (url.Contains("default.aspx"))
                         url = url.Replace("default.aspx", "");                      

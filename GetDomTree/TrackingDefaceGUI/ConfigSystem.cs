@@ -17,7 +17,8 @@ namespace TrackingDefaceGUI
             InitializeComponent();
         }
 
-        private void tabPage1_Click(object sender, EventArgs e)
+       
+        private void ConfigSystem_Load(object sender, EventArgs e)
         {
 
         }

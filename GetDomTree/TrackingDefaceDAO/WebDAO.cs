@@ -9,9 +9,9 @@ using System.Data.SqlClient;
 
 namespace TrackingDefaceDAO
 {
-    public class WebDAO :DBConnection
+    public class WebDAO : DBConnection
     {
-        public WebDAO() : base() {}
+        public WebDAO() : base() { }
 
         /* Get all records WEb */
         public DataTable GetAll()
@@ -20,7 +20,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Select WebID, NameSite, URL, IPPublic, Phones, isEnable from WEB", conn);
+                SqlCommand cmd = new SqlCommand("Select * from WEB", conn);
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -39,7 +39,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("select WebID, NameSite, URL, IPPublic, Phones, Emails, WebStatus, WebPriority, isEnable from WEB "
+                SqlCommand cmd = new SqlCommand("select WebID, NameSite, URL, BanText, IPPublic, Phones, Emails, WebStatus, WebPriority, isEnable from WEB "
                                                 + " where isEnable = @isEnable ", conn);
                 cmd.Parameters.Add("@isEnable", SqlDbType.Bit).Value = isEnable;
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
@@ -47,6 +47,34 @@ namespace TrackingDefaceDAO
                 adap.Fill(dt);
                 conn.Close();
                 return dt;
+            }
+            catch (Exception)
+            {
+                conn.Close();
+                throw;
+            }
+        }
+
+        /* Get list web isEnable tracking */
+        public Web GetEmailByWebID(int webID)
+        {
+            Web web = new Web();
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                SqlCommand cmd = new SqlCommand("select Emails, Phones from WEB "
+                                                + " where WebID = @WebID ", conn);
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = webID;
+                SqlDataReader rd = cmd.ExecuteReader();
+                if (rd.Read())
+                {
+                    web.phones = rd["Phones"].ToString().Trim();
+                    web.emails = rd["Emails"].ToString().Trim();
+                    rd.Close();
+                }
+                conn.Close();
+                return web;
             }
             catch (Exception)
             {
@@ -135,7 +163,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Update WEB Set NameSite = @NameSite, URL = @URL, IPPublic = @IPPublic," 
+                SqlCommand cmd = new SqlCommand("Update WEB Set NameSite = @NameSite, URL = @URL, IPPublic = @IPPublic,"
                                     + " IPPrivate = @IPPrivate , WebPriority = @Webpriority,"
                                     + " Phones = @Phones, Emails = @Emails, searchText = @searchText, "
                                     + "WebStatus = @WebStatus, BanText = @BanText, isEnable = @isEnable"
@@ -163,6 +191,29 @@ namespace TrackingDefaceDAO
                 return false;
             }
         }
+
+        /* Update Webstatus */
+        public bool UpdateStatus(Web web)
+        {
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                SqlCommand cmd = new SqlCommand("Update WEB Set WebStatus = @WebStatus where WebID = @WebID", conn);
+                cmd.Parameters.Add("@WebID", SqlDbType.Int).Value = web.webID;
+                cmd.Parameters.Add("@WebStatus", SqlDbType.NVarChar).Value = web.webStatus;
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
 
         /* Delete object Website by webID from database */
         public bool Delete(int webID)

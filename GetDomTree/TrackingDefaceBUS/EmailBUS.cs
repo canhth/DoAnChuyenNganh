@@ -20,7 +20,9 @@ namespace TrackingDefaceBUS
 {
     public class EmailBUS
     {
-        private EmailDAO objectDAO = new EmailDAO();
+        public EmailDAO objectDAO = new EmailDAO();
+        public WebDAO objectWebDAO = new WebDAO();
+
         public void SendEmail(Web web, string subjects)
         {
             Email email = objectDAO.GetEmailByisHost(true);
@@ -35,8 +37,8 @@ namespace TrackingDefaceBUS
             client.UseDefaultCredentials = false;
             client.Credentials = new System.Net.NetworkCredential(email.email, email.passWords);
 
-            MailMessage mm = new MailMessage(email.email, web.emails);   
-            mm.Subject = "Cảnh báo về trạng thái Website của bạn.";
+            MailMessage mm = new MailMessage(email.email, web.emails);
+            mm.Subject = "Cảnh báo về trạng thái Website của bạn." + subjects;
      
             string body = "Xin chào ban quản trị" + web.nameSite + ",";
             body += "<br/> Chúng tôi vừa phát hiện được sự thay đổi bất thường về nội dung WebSite của bạn vào lúc "+ DateTime.Now.ToString();
