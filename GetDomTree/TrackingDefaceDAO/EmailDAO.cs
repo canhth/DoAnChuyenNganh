@@ -19,7 +19,7 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Select * from EMAIL");
+                SqlCommand cmd = new SqlCommand("Select * from EMAIL", conn);
                 SqlDataAdapter adap = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adap.Fill(dt);
@@ -100,8 +100,8 @@ namespace TrackingDefaceDAO
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
-                SqlCommand cmd = new SqlCommand("Update User Set port = @port, host = @host,"
-                                    + " timeSend = @timeSend, email = @email "
+                SqlCommand cmd = new SqlCommand("Update EMAIL Set port = @port, host = @host,"
+                                    + " timeSend = @timeSend, email = @email, "
                                     + " passWords = @passWords, enableSSL = @enableSSL, isHost = @isHost "
                                     + " where id = @id", conn);
                 cmd.Parameters.Add("@id", SqlDbType.Int).Value = email.id;

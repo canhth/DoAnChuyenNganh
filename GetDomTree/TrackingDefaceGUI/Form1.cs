@@ -227,6 +227,15 @@ namespace TrackingDefaceGUI
                 
             }
         }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabPage4)
+            {
+                ConfigSystem config = new ConfigSystem();
+                config.Show();
+            }
+        }
    
        
       

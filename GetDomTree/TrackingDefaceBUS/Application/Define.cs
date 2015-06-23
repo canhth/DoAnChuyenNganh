@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TrackingDefaceDAO;
 using TrackingDefaceDTO;
 using TrackingDefaceBUS;
+using System.Media;
 
 namespace TrackingDefaceBUS.Application
 {
@@ -61,6 +62,7 @@ namespace TrackingDefaceBUS.Application
                         emailBUS.SendEmail(web, "Website co the bi hack muc do 2");
                         objectTextContentBUS.UpdateTextContent(webID, _textContent, result);
                         webDAO.UpdateStatus(web);
+                        PlaySound();
                         break;
                     case 3:
                         result = "Warning";
@@ -76,6 +78,7 @@ namespace TrackingDefaceBUS.Application
                         objectTextContentBUS.UpdateTextContent(webID, _textContent, result);
                         web.webStatus = result;
                         webDAO.UpdateStatus(web);
+                        PlaySound();
                         break;
                     case 5:
                         result = "Warning";
@@ -83,6 +86,7 @@ namespace TrackingDefaceBUS.Application
                         objectTextContentBUS.UpdateTextContent(webID, _textContent, result);
                         web.webStatus = result;
                         webDAO.UpdateStatus(web);
+                        PlaySound();
                         break;
                 }
 
@@ -94,9 +98,16 @@ namespace TrackingDefaceBUS.Application
                     objectTextContentBUS.UpdateTextContent(webID, _textContent, result);
                     /*Canh bao bang moi gia'*/
                     emailBUS.SendEmail(web, "WebSite cua ban chac chan da bi tan cong");
+                    PlaySound();
                 }
             }
             
+        }
+
+        public void PlaySound()
+        {
+            SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\ád\Documents\GitHub\DoAnChuyenNganh\GetDomTree\TrackingDefaceDTO\bellRing.wav");
+            simpleSound.Play();
         }
     }
 }

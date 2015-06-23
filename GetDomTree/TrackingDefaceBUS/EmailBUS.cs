@@ -55,5 +55,33 @@ namespace TrackingDefaceBUS
             client.Send(mm);
 
         }
+
+        public void LoadDataSource (TextBox port, TextBox host, TextBox timeOut, TextBox email, CheckBox enableSSL, TextBox pass)
+        {
+            DataTable dtEmail = objectDAO.GetAll();
+            port.Text = dtEmail.Rows[0]["port"].ToString();
+            host.Text = dtEmail.Rows[0]["host"].ToString();
+            timeOut.Text = dtEmail.Rows[0]["timeSend"].ToString();
+            email.Text = dtEmail.Rows[0]["email"].ToString();
+            enableSSL.Checked = (bool)dtEmail.Rows[0]["enableSSL"];
+            pass.Text = dtEmail.Rows[0]["passWords"].ToString();
+          
+        }
+        
+
+        public void UpdateEmail (TextBox port, TextBox host, TextBox timeOut, TextBox emailtext, CheckBox enableSSL, TextBox pass)
+        {
+            Email email = new Email();
+            email.port = port.Text;
+            email.id = 1;
+            email.isHost = true;
+            email.host = host.Text;
+            email.timeSend = Int32.Parse(timeOut.Text);
+            email.email = emailtext.Text;
+            email.passWords = pass.Text;
+            email.enableSSL = enableSSL.Checked;
+            objectDAO.Update(email);
+        }
+   
     }
 }
